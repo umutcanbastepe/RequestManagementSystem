@@ -2,7 +2,7 @@
 using RequestManagementSystem.Data;
 using RequestManagementSystem.Helpers;
 using RequestManagementSystem.Models.ViewModels;
-
+using static RequestManagementSystem.Helpers.Constants;
 namespace RequestManagementSystem.Controllers
 {
     public class AccountController : Controller
@@ -35,9 +35,9 @@ namespace RequestManagementSystem.Controllers
                 return View();
             }
 
-            HttpContext.Session.SetInt32("UserId", user.Id);
-            HttpContext.Session.SetInt32("Role", (int)user.Role);
-            HttpContext.Session.SetString("FullName", user.FullName);
+            HttpContext.Session.SetInt32(SessionKeys.UserId, user.Id);
+            HttpContext.Session.SetInt32(SessionKeys.Role, (int)user.Role);
+            HttpContext.Session.SetString(SessionKeys.FullName, user.FullName);
 
             return RedirectToAction("Index", "Dashboard");
         }

@@ -6,6 +6,7 @@ using RequestManagementSystem.Helpers;
 using RequestManagementSystem.Models.Entities;
 using RequestManagementSystem.Models.Enums;
 using RequestManagementSystem.Models.ViewModels;
+using static RequestManagementSystem.Helpers.Constants;
 
 namespace RequestManagementSystem.Controllers
 {
@@ -57,7 +58,7 @@ namespace RequestManagementSystem.Controllers
                     Role = model.Role
                 });
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Kullanıcı oluşturuldu.";
+                TempData[TempDataKeys.Message] = "Kullanıcı oluşturuldu.";
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -97,7 +98,7 @@ namespace RequestManagementSystem.Controllers
                 if (!string.IsNullOrWhiteSpace(model.NewPassword))
                     user.Password = model.NewPassword;
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Kullanıcı güncellendi.";
+                TempData[TempDataKeys.Message] = "Kullanıcı güncellendi.";
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -110,7 +111,7 @@ namespace RequestManagementSystem.Controllers
             var currentUserId = SessionHelper.GetUserId(HttpContext.Session).Value;
             if (id == currentUserId)
             {
-                TempData["Error"] = "Kendinizi silemezsiniz.";
+                TempData[TempDataKeys.Error] = "Kendinizi silemezsiniz.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -120,13 +121,13 @@ namespace RequestManagementSystem.Controllers
             var hasRequests = await _context.Requests.AnyAsync(r => r.CreatedByUserId == id);
             if (hasRequests)
             {
-                TempData["Error"] = "Bu kullanıcının talepleri olduğu için silinemez.";
+                TempData[TempDataKeys.Error] = "Bu kullanıcının talepleri olduğu için silinemez.";
                 return RedirectToAction(nameof(Index));
             }
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
-            TempData["Message"] = "Kullanıcı silindi.";
+            TempData[TempDataKeys.Message] = "Kullanıcı silindi.";
             return RedirectToAction(nameof(Index));
         }
     }
