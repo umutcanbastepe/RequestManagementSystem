@@ -3,3 +3,101 @@
     ViewData["Title"] = "Dashboard";
 }
 <h2>Dashboard</h2>
+<div class="row mb-4">
+    @if (Model.IsManagerOrAdmin)
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Toplam Talep</h5>
+                    <p class="card-text display-6">@Model.TotalRequestCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Onay Bekleyen</h5>
+                    <p class="card-text display-6">@Model.PendingApprovalCount</p>
+                    <a asp-controller="Approval" asp-action="Index" class="btn btn-sm btn-warning">Görüntüle</a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Toplam Taleplerim</h5>
+                    <p class="card-text display-6">@Model.MyRequestCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Onay Bekleyen Taleplerim</h5>
+                    <p class="card-text display-6">@Model.MyPendingCount</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="col-12">
+        <h4>Son Talepler</h4>
+        @if (Model.LastRequests == null || !Model.LastRequests.Any())
+        {
+            <p class="text-muted">Henüz talep bulunmuyor.</p>
+        }
+        else
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Talep No</th>
+                        <th>Başlık</th>
+                        <th>Tür</th>
+                        <th>Öncelik</th>
+                        <th>Durum</th>
+                        <th>Oluşturan</th>
+                        <th>Tarih</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LastRequests)
+                    {
+                        <tr>
+                            <td>@item.RequestNo</td>
+                            <td>@item.Title</td>
+                            <td>@item.Type</td>
+                            <td>@item.Priority</td>
+                            <td>@item.Status</td>
+                            <td>@item.CreatedByFullName</td>
+                            <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                <a asp-controller="Request" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <a asp-controller="Request" asp-action="Index" class="btn btn-outline-primary btn-lg w-100">Talep Listesi</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Request" asp-action="Create" class="btn btn-outline-success btn-lg w-100">Yeni Talep</a>
+    </div>
+    @if (Model.IsManagerOrAdmin)
+    {
+        <div class="col-md-4">
+            <a asp-controller="Approval" asp-action="Index" class="btn btn-outline-warning btn-lg w-100">Onay Bekleyenler</a>
+        </div>
+    }
+</div>
