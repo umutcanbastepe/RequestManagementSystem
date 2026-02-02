@@ -1,0 +1,30 @@
+@model RequestManagementSystem.Models.ViewModels.RequestCreateVM
+@{
+    ViewData["Title"] = "Yeni Talep";
+}
+<h2>Yeni Talep Oluştur</h2>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<RequestManagementSystem.Models.Enums.RequestType>()"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Priority" class="form-label"></label>
+        <select asp-for="Priority" class="form-select" asp-items="Html.GetEnumSelectList<RequestManagementSystem.Models.Enums.RequestPriority>()"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

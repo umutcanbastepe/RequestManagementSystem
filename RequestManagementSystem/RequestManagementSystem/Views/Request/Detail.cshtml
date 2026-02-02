@@ -1,0 +1,66 @@
+@model RequestManagementSystem.Models.ViewModels.RequestDetailVM
+@{
+    ViewData["Title"] = "Talep Detay";
+}
+<h2>Talep Detay</h2>
+<dl class="row">
+    <dt class="col-sm-3">Talep No</dt>
+    <dd class="col-sm-9">@Model.RequestNo</dd>
+    <dt class="col-sm-3">Başlık</dt>
+    <dd class="col-sm-9">@Model.Title</dd>
+    <dt class="col-sm-3">Açıklama</dt>
+    <dd class="col-sm-9">@(Model.Description ?? "-")</dd>
+    <dt class="col-sm-3">Talep Türü</dt>
+    <dd class="col-sm-9">@Model.Type</dd>
+    <dt class="col-sm-3">Öncelik</dt>
+    <dd class="col-sm-9">@Model.Priority</dd>
+    <dt class="col-sm-3">Durum</dt>
+    <dd class="col-sm-9">@Model.Status</dd>
+    <dt class="col-sm-3">Oluşturan</dt>
+    <dd class="col-sm-9">@Model.CreatedByFullName</dd>
+    <dt class="col-sm-3">Oluşturma Tarihi</dt>
+    <dd class="col-sm-9">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+</dl>
+@if (Model.History != null && Model.History.Any())
+{
+    <h4 class="mt-4">Durum Geçmişi</h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Durum</th>
+                <th>Açıklama</th>
+                <th>İşlemi Yapan</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var h in Model.History)
+            {
+                <tr>
+                    <td>@h.Status</td>
+                    <td>@h.Description</td>
+                    <td>@h.ActionByFullName</td>
+                    <td>@h.ActionDate.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<div>
+    @if (Model.CanEdit)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        @if (Model.Status == RequestManagementSystem.Models.Enums.RequestStatus.Draft)
+        {
+            <form asp-action="Submit" asp-route-id="@Model.Id" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success">Onaya Gönder</button>
+            </form>
+        }
+    }
+    @if (Model.CanApproveReject)
+    {
+        <a asp-controller="Approval" asp-action="Index" asp-route-requestId="@Model.Id" class="btn btn-success">Onay / Reddet</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+</div>

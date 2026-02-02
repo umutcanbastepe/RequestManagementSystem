@@ -1,0 +1,95 @@
+@model RequestManagementSystem.Models.ViewModels.RequestListIndexVM
+@{
+    ViewData["Title"] = "Talep Listesi";
+}
+<h2>Talep Listesi</h2>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Yeni Talep</a>
+</p>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-auto">
+        <input type="text" name="searchTitle" value="@Model.SearchTitle" class="form-control" placeholder="Başlık ara" />
+    </div>
+    <div class="col-auto">
+        <select name="status" class="form-select">
+            <option value="">Tüm durumlar</option>
+            @foreach (var e in Enum.GetValues<RequestManagementSystem.Models.Enums.RequestStatus>())
+            {
+                <option value="@((int)e)" selected="@(Model.FilterStatus == e)">@e</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <input type="date" name="dateFrom" value="@Model.FilterDateFrom?.ToString("yyyy-MM-dd")" class="form-control" placeholder="Başlangıç" />
+    </div>
+    <div class="col-auto">
+        <input type="date" name="dateTo" value="@Model.FilterDateTo?.ToString("yyyy-MM-dd")" class="form-control" placeholder="Bitiş" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">Filtrele</button>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Talep No</th>
+            <th>Başlık</th>
+            <th>Tür</th>
+            <th>Öncelik</th>
+            <th>Durum</th>
+            <th>Oluşturan</th>
+            <th>Tarih</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Requests)
+        {
+            <tr>
+                <td>@item.RequestNo</td>
+                <td>@item.Title</td>
+                <td>@item.Type</td>
+                <td>@item.Priority</td>
+                <td>@item.Status</td>
+                <td>@item.CreatedByFullName</td>
+                <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>
+                    <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
+                    @if (item.Status != RequestManagementSystem.Models.Enums.RequestStatus.Approved)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var totalPages = (int)Math.Ceiling(Model.TotalCount / (double)Model.PageSize);
+    if (totalPages > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @for (var i = 1; i <= totalPages; i++)
+                {
+                    var routeValues = new Dictionary<string, string>
+                    {
+                        ["page"] = i.ToString(),
+                        ["pageSize"] = Model.PageSize.ToString()
+                    };
+                    if (!string.IsNullOrEmpty(Model.SearchTitle)) routeValues["searchTitle"] = Model.SearchTitle;
+                    if (Model.FilterStatus.HasValue) routeValues["status"] = ((int)Model.FilterStatus.Value).ToString();
+                    if (Model.FilterDateFrom.HasValue) routeValues["dateFrom"] = Model.FilterDateFrom.Value.ToString("yyyy-MM-dd");
+                    if (Model.FilterDateTo.HasValue) routeValues["dateTo"] = Model.FilterDateTo.Value.ToString("yyyy-MM-dd");
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-all-route-data="routeValues">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+<p class="text-muted">Toplam @Model.TotalCount kayıt</p>
