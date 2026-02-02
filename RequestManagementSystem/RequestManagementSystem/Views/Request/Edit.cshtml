@@ -24,7 +24,7 @@
         <select asp-for="Priority" class="form-select" asp-items="Html.GetEnumSelectList<RequestManagementSystem.Models.Enums.RequestPriority>()"></select>
     </div>
     <button type="submit" class="btn btn-primary">Güncelle</button>
-    <a asp-action="Detail" asp-route-id="@Model.Id" class="btn btn-secondary">İptal</a>
+    <a href="javascript:history.back()" class="btn btn-secondary">İptal</a>
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

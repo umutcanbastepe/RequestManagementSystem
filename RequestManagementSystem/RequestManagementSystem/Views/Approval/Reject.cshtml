@@ -1,0 +1,21 @@
+@model RequestManagementSystem.Models.ViewModels.RejectVM
+@{
+    ViewData["Title"] = "Talep Reddet";
+}
+<h2>Talep Reddet</h2>
+<p>Talep No: <strong>@Model.RequestNo</strong></p>
+<form asp-action="Reject" method="post">
+    <input type="hidden" asp-for="RequestId" />
+    <input type="hidden" asp-for="RequestNo" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Reason" class="form-label"></label>
+        <textarea asp-for="Reason" class="form-control" rows="4" placeholder="Red sebebini yazınız..."></textarea>
+        <span asp-validation-for="Reason" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-danger">Reddet</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

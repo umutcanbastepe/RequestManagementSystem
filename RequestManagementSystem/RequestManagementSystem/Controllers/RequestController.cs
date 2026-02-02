@@ -221,7 +221,7 @@ namespace RequestManagementSystem.Controllers
                 Status = entity.Status,
                 CreatedByFullName = entity.CreatedByUser.FullName,
                 CreatedAt = entity.CreatedAt,
-                CanEdit = entity.Status != RequestStatus.Approved && (role == Role.Admin || entity.CreatedByUserId == userId),
+                CanEdit = (entity.Status != RequestStatus.Approved && entity.Status != RequestStatus.Rejected) && (role == Role.Admin || entity.CreatedByUserId == userId),
                 CanApproveReject = (role == Role.Manager || role == Role.Admin) && entity.Status == RequestStatus.PendingApproval,
                 History = history
             };

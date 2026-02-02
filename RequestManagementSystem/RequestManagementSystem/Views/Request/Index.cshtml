@@ -57,7 +57,8 @@
                 <td>@item.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
                 <td>
                     <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
-                    @if (item.Status != RequestManagementSystem.Models.Enums.RequestStatus.Approved)
+                    @if (item.Status == RequestManagementSystem.Models.Enums.RequestStatus.PendingApproval 
+                    || item.Status == RequestManagementSystem.Models.Enums.RequestStatus.Draft)
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
                     }
