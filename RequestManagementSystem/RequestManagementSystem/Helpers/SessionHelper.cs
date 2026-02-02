@@ -1,4 +1,5 @@
 using RequestManagementSystem.Models.Enums;
+using static RequestManagementSystem.Helpers.Constants;
 
 namespace RequestManagementSystem.Helpers
 {
@@ -6,18 +7,18 @@ namespace RequestManagementSystem.Helpers
     {
         public static int? GetUserId(ISession session)
         {
-            return session.GetInt32("UserId");
+            return session.GetInt32(SessionKeys.UserId);
         }
 
         public static Role? GetRole(ISession session)
         {
-            var role = session.GetInt32("Role");
+            var role = session.GetInt32(SessionKeys.Role);
             return role.HasValue ? (Role)role.Value : null;
         }
 
         public static string? GetFullName(ISession session)
         {
-            return session.GetString("FullName");
+            return session.GetString(SessionKeys.FullName);
         }
 
         public static bool IsLoggedIn(ISession session)
