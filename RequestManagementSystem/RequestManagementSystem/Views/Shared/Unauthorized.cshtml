@@ -1,0 +1,9 @@
+@{
+    ViewData["Title"] = "Yetkisiz Erişim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="alert alert-warning">
+    <h4>Yetkisiz Erişim</h4>
+    <p>Bu sayfaya erişim yetkiniz bulunmamaktadır.</p>
+    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary">Dashboard'a Dön</a>
+</div>

@@ -1,0 +1,38 @@
+@model RequestManagementSystem.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Giriþ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <h2 class="text-center mb-4">Talep Yönetim Sistemi</h2>
+        <div class="card shadow">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Giriþ Yap</h5>
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+                <form asp-action="Login" method="post">
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">Kullanýcý Adý</label>
+                        <input asp-for="Username" class="form-control" placeholder="Kullanýcý adýnýz" autofocus />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Þifre</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Þifreniz" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Giriþ</button>
+                </form>
+                <p class="text-muted small mt-3 mb-0">
+                    Test: admin/123, manager/123, user/123
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
